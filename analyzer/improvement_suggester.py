@@ -70,7 +70,7 @@ class ImprovementSuggester:
         prompt = f"""
         PERFORMANCE ANALYSIS:
         
-        Static Issues: {static.get('sonarqube', {}).get('issues', [])[:10]}
+        Static Issues: {static.get('semgrep', {}).get('results', [])[:10]}
         Memory Usage: {dynamic.get('memory_profile', {})}
         Execution Complexity: {dynamic.get('call_graph', {}).get('most_complex', [])}
         
@@ -115,7 +115,7 @@ class ImprovementSuggester:
         CODE QUALITY ANALYSIS:
         
         Quality Metrics: {static.get('summary', {}).get('quality_metrics', {})}
-        Issues Found: {len(static.get('sonarqube', {}).get('issues', []))}
+        Issues Found: {len(static.get('semgrep', {}).get('results', []))}
         Code Structure: {self._analyze_code_quality_metrics(codebase_path)}
         
         Suggest code quality improvements for:
