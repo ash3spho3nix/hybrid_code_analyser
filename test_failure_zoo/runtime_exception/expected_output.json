@@ -1,0 +1,13 @@
+{
+  "analysis_status": "partial",
+  "execution_failures": [
+    {
+      "failure_type": "RUNTIME_ERROR",
+      "severity": "ERROR",
+      "message": "ValueError: Test runtime exception",
+      "is_analysis_finding": false
+    }
+  ],
+  "coverage_percentage": 50.0,
+  "completeness_context": "Runtime exception during analysis"
+}

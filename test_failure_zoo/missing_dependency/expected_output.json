@@ -1,0 +1,13 @@
+{
+  "analysis_status": "partial",
+  "execution_failures": [
+    {
+      "failure_type": "DEPENDENCY_ERROR",
+      "severity": "ERROR",
+      "message": "ModuleNotFoundError: No module named 'pandas'",
+      "is_analysis_finding": false
+    }
+  ],
+  "coverage_percentage": 0.0,
+  "completeness_context": "Missing dependency prevented analysis"
+}

@@ -1,0 +1,11 @@
+{
+  "analysis_status": "complete",
+  "execution_failures": [],
+  "discovery_artifacts": {
+    "files_discovered": 1,
+    "files_ignored_by_rule": 0,
+    "files_passed_to_analysis": 1,
+    "analysis_coverage_percentage": 100.0
+  },
+  "completeness_context": "File discovered and analyzed but no execution required"
+}

@@ -1,0 +1,73 @@
+{
+  "test_manifest_version": "1.0",
+  "failure_categories": [
+    {
+      "category": "missing_import",
+      "description": "Test for missing import failure detection",
+      "test_files": [
+        "missing_import/test_missing_import.py"
+      ],
+      "expected_output": "missing_import/expected_output.json",
+      "failure_type": "IMPORT_ERROR"
+    },
+    {
+      "category": "circular_import",
+      "description": "Test for circular import detection",
+      "test_files": [
+        "circular_import/module_a.py",
+        "circular_import/module_b.py"
+      ],
+      "expected_output": "circular_import/expected_output.json",
+      "failure_type": "CIRCULAR_IMPORT"
+    },
+    {
+      "category": "syntax_error",
+      "description": "Test for syntax error detection",
+      "test_files": [
+        "syntax_error/test_syntax_error.py"
+      ],
+      "expected_output": "syntax_error/expected_output.json",
+      "failure_type": "SYNTAX_ERROR"
+    },
+    {
+      "category": "runtime_exception",
+      "description": "Test for runtime exception handling",
+      "test_files": [
+        "runtime_exception/test_runtime_exception.py"
+      ],
+      "expected_output": "runtime_exception/expected_output.json",
+      "failure_type": "RUNTIME_ERROR"
+    },
+    {
+      "category": "missing_dependency",
+      "description": "Test for missing dependency detection",
+      "test_files": [
+        "missing_dependency/test_missing_dep.py"
+      ],
+      "expected_output": "missing_dependency/expected_output.json",
+      "failure_type": "DEPENDENCY_ERROR"
+    },
+    {
+      "category": "ignored_by_rules",
+      "description": "Test for file exclusion by ignore rules",
+      "test_files": [
+        "ignored_by_rules/test_ignored.py"
+      ],
+      "expected_output": "ignored_by_rules/expected_output.json",
+      "failure_type": "IGNORE_RULE",
+      "ignore_rule": "test_ignored.py"
+    },
+    {
+      "category": "discovered_not_executed",
+      "description": "Test for discovered but not executed files",
+      "test_files": [
+        "discovered_not_executed/test_discovered.py"
+      ],
+      "expected_output": "discovered_not_executed/expected_output.json",
+      "failure_type": "NO_EXECUTION_NEEDED"
+    }
+  ],
+  "total_test_cases": 7,
+  "manifest_timestamp": "2026-01-17T16:39:00Z",
+  "test_framework_version": "1.0.0"
+}

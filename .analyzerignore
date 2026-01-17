@@ -1,0 +1,99 @@
+# Hybrid Code Analyzer - Default Ignore Rules
+# This file defines what files/directories should be ignored during code analysis
+# 
+# PRECEDENCE: This file takes highest priority over .gitignore and .kilocodeignore
+# If this file exists, other ignore files will not be used for analysis
+
+# Common non-code directories
+node_modules/
+venv/
+.env/
+__pycache__/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Test files and directories
+test_*.py
+*.test.py
+tests/
+
+# Common non-code file types
+*.log
+*.tmp
+*.bak
+*.swp
+
+# IDE-specific files and directories
+.idea/
+.vscode/
+*.iml
+
+# Documentation files
+*.md
+*.rst
+
+# Configuration files
+*.ini
+*.cfg
+*.conf
+
+# Database files
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Virtual environment files
+pyvenv.cfg
+.python-version
+
+# Project-specific ignores for code analysis
+# These are files that typically don't need static/dynamic analysis
+
+# Ignore large generated files
+migrations/
+
+# Ignore API documentation
+api_docs/
+
+# Ignore example/test data
+example_data/
+sample_data/
+
+# Ignore local development configurations
+local_config.json
+.development.env
+
+# Ignore any cache directories
+.cache/
+
+# Ignore any temporary directories
+temp/
+tmp/
+
+# Ignore any backup files
+*~
+*.bak
+
+# Ignore any minified files
+*.min.js
+*.min.css
+
+# Ignore any bundle files
+bundle.js
+bundle.css
+
+# Ignore any coverage files
+coverage/
+.coverage
+
+# Ignore any log directories
+logs/
+
+# Ignore any build tool outputs
+webpack.config.js
+package-lock.json
+yarn.lock

@@ -23,7 +23,7 @@ class DiscoveryArtifactGenerator:
             ignore_report: Report from ignore rules processing
             type_filter_report: Report from file type filtering
             final_files: Files passed to analysis
-            
+        
         Returns:
             Dictionary containing complete discovery artifact
         """
@@ -68,14 +68,18 @@ class DiscoveryArtifactGenerator:
                 'sources': []
             }
         
-        return {
+        section = {
             'rules_applied': True,
             'files_ignored': ignore_report.total_files_ignored,
             'sources': list(ignore_report.ignore_sources),
             'patterns_used': list(ignore_report.patterns_applied),
             'ignored_files_count': len(ignore_report.ignored_files),
+            'rules_source': ignore_report.rules_source,
+            'fallback_used': ignore_report.fallback_used,
             'ignored_files_sample': ignore_report.ignored_files[:10] if ignore_report.ignored_files else []
         }
+        
+        return section
     
     def _generate_filter_section(self, filter_report: Optional['FileTypeFilterReport']) -> Dict[str, Any]:
         """Generate file type filtering section of artifact"""
@@ -126,7 +130,7 @@ class DiscoveryArtifactGenerator:
         
         Args:
             artifact: Discovery artifact dictionary
-            
+        
         Returns:
             Formatted console summary string
         """
@@ -173,7 +177,7 @@ class DiscoveryArtifactGenerator:
         Args:
             artifact: Discovery artifact dictionary
             output_path: Path to save JSON file
-            
+        
         Returns:
             True if successful, False if failed
         """

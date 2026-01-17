@@ -1,0 +1,1 @@
+def main(): raise ValueError("Test runtime exception")

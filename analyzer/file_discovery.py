@@ -39,22 +39,33 @@ class IgnoreReport:
         self.ignored_files = []
         self.ignore_sources = set()
         self.patterns_applied = set()
+        self.rules_source = None  # Track which source was used
+        self.fallback_used = False  # Track if fallback was used
 
     @property
     def total_files_ignored(self) -> int:
         """Get total number of files ignored"""
         return len(self.ignored_files)
 
+    def set_rules_source(self, source: str, is_fallback: bool = False):
+        """Set the source of ignore rules"""
+        self.rules_source = source
+        self.fallback_used = is_fallback
+
     def add_ignored_file(self, file_path: str, reason: str):
         """Add a file to the ignore report with reason"""
         self.ignored_files.append({'file': file_path, 'reason': reason})
 
         # Extract source and pattern from reason
-        if '[' in reason and ']' in reason:
-            source = reason.split('[')[1].split(']')[0]
-            self.ignore_sources.add(source)
-            pattern = reason.split('pattern:')[1].strip() if 'pattern:' in reason else 'unknown'
-            self.patterns_applied.add(pattern)
+        if 'Ignored by' in reason and '[' in reason and ']' in reason:
+            # Extract source from "Ignored by SOURCE [pattern: PATTERN]"
+            source_part = reason.split('Ignored by ')[1].split(' [')[0]
+            self.ignore_sources.add(source_part)
+            
+            # Extract pattern from "[pattern: PATTERN]"
+            if 'pattern:' in reason:
+                pattern = reason.split('pattern:')[1].split(']')[0].strip()
+                self.patterns_applied.add(pattern)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert ignore report to dictionary"""
@@ -62,6 +73,8 @@ class IgnoreReport:
             'total_files_ignored': self.total_files_ignored,
             'ignore_sources': list(self.ignore_sources),
             'patterns_applied': list(self.patterns_applied),
+            'rules_source': self.rules_source,
+            'fallback_used': self.fallback_used,
             'ignored_files': self.ignored_files
         }
 
@@ -76,13 +89,6 @@ class FileDiscoveryService:
         self.artifact_generator = DiscoveryArtifactGenerator()
 
 
-
-
-
-
-
-
-
     def discover_files(self, root_paths: List[str], analyzer_type: str = None) -> DiscoveryResult:
         """
         Main file discovery method with full ignore processing
@@ -90,7 +96,7 @@ class FileDiscoveryService:
         Args:
             root_paths: List of root folder paths to search
             analyzer_type: Optional analyzer type for specific ignore files
-            
+        
         Returns:
             DiscoveryResult object containing all discovery data
         """
@@ -136,7 +142,7 @@ class FileDiscoveryService:
         
         Args:
             root_paths: List of root paths to search
-            
+        
         Returns:
             List of all file paths found
         """
@@ -160,40 +166,42 @@ class FileDiscoveryService:
 
     def _apply_ignore_rules(self, files: List[str], root_paths: List[str], analyzer_type: str = None):
         """
-        Apply ignore rules to the list of files
-        
-        Args:
-            files: List of file paths to filter
-            root_paths: Root paths for ignore file discovery
-            analyzer_type: Optional analyzer type for specific ignore files
-            
-        Returns:
-            Tuple of (filtered_files, ignore_report)
+        Apply ignore rules to the list of files using real implementations
         """
         # Load ignore rules from all root paths
         all_ignore_rules = []
+        ignore_report = IgnoreReport()
+        
         for root_path in root_paths:
-            try:
-                rules = self.ignore_processor.load_ignore_rules(root_path, analyzer_type)
-                all_ignore_rules.extend(rules)
-            except Exception as e:
-                print(f"Warning: Could not load ignore rules from {root_path}: {e}")
-                continue
+            rules = self.ignore_processor.load_ignore_rules(root_path, analyzer_type)
+            
+            # Track which source was used
+            if rules:
+                source = "unknown"
+                if rules[0].source == '.analyzerignore':
+                    source = '.analyzerignore'
+                elif rules[0].source == '.gitignore':
+                    source = '.gitignore'
+                elif rules[0].source == '.kilocodeignore':
+                    source = '.kilocodeignore'
+                elif rules[0].source == 'default_config':
+                    source = 'default_config'
+                    ignore_report.set_rules_source(source, is_fallback=True)
+                else:
+                    source = rules[0].source
+                
+                ignore_report.set_rules_source(source, is_fallback=(source == 'default_config'))
+            
+            all_ignore_rules.extend(rules)
 
         # Apply ignore rules to each file
         filtered_files = []
-        ignore_report = IgnoreReport()
 
         for file_path in files:
-            try:
-                should_ignore, reason = self.ignore_processor.should_ignore_file(file_path, all_ignore_rules)
-                if should_ignore:
-                    ignore_report.add_ignored_file(file_path, reason)
-                else:
-                    filtered_files.append(file_path)
-            except Exception as e:
-                # If there's an error checking ignore rules, include the file
-                print(f"Warning: Error checking ignore rules for {file_path}: {e}")
+            should_ignore, reason = self.ignore_processor.should_ignore_file(file_path, all_ignore_rules)
+            if should_ignore:
+                ignore_report.add_ignored_file(file_path, reason)
+            else:
                 filtered_files.append(file_path)
 
         return filtered_files, ignore_report

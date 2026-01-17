@@ -154,6 +154,83 @@ test_*.py
 *.bak
 ```
 
+### New Precedence Logic
+
+**IMPORTANT**: The precedence logic has been updated in the latest version:
+
+1. **`.analyzerignore`** (highest priority - NEW!)
+2. **`.gitignore`** 
+3. **`.kilocodeignore`**
+4. **Default rules from configuration** (fallback)
+
+#### Key Changes
+
+- **`.analyzerignore` now has highest priority**: If this file exists, other ignore files will NOT be used
+- **Fallback to defaults**: When no ignore files exist, the system uses sensible default rules instead of "ignore nothing"
+- **Better debugging**: Discovery artifacts now track which ignore rules source was used
+
+#### Migration Guide
+
+**Existing Projects**: Continue working as before. The new precedence logic will:
+- First look for `.analyzerignore`
+- If not found, use existing `.gitignore` or `.kilocodeignore` files
+- If no ignore files exist, use sensible defaults
+
+**New Projects**: Can use `.analyzerignore` for analyzer-specific ignore rules
+
+**Configuration**: Default rules can be customized in `config/ignore_rules_config.py`
+
+#### Example .analyzerignore File
+
+```gitignore
+# Hybrid Code Analyzer - Default Ignore Rules
+# This file defines what files/directories should be ignored during code analysis
+
+# Common non-code directories
+node_modules/
+venv/
+.env/
+__pycache__/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Test files
+test_*.py
+*.test.py
+tests/
+
+# IDE files
+.idea/
+.vscode/
+
+# Documentation
+*.md
+*.rst
+```
+
+#### Discovery Artifact Enhancements
+
+Discovery artifacts now include:
+
+```json
+{
+  "ignore_processing": {
+    "rules_applied": true,
+    "files_ignored": 45,
+    "sources": [".analyzerignore"],
+    "rules_source": ".analyzerignore",
+    "fallback_used": false,
+    "patterns_used": ["node_modules/", "venv/"],
+    "ignored_files_count": 45
+  }
+}
+```
+
+The `rules_source` field shows which ignore file was used, and `fallback_used` indicates whether default rules were applied.
+
 ### File Type Filtering
 
 The analyzer automatically filters non-code files using these extensions:
@@ -244,9 +321,10 @@ filter = FileTypeFilter(custom_extensions=['.mydsl', '.custom'])
 #### Ignore File Precedence
 
 The analyzer respects this precedence order:
-1. `.gitignore` (standard Git ignore patterns)
-2. `.kilocodeignore` (project-specific patterns)
-3. `.analyzerignore` (analyzer-specific patterns)
+1. `.analyzerignore` (analyzer-specific patterns - highest priority)
+2. `.gitignore` (standard Git ignore patterns)
+3. `.kilocodeignore` (project-specific patterns)
+4. Default rules from configuration (fallback)
 
 ### Security Features
 
