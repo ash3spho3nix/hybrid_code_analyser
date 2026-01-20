@@ -2,10 +2,19 @@
 import argparse
 import json
 import sys
+import warnings
+import os
 from typing import Dict, Any
 from analyzer.multi_codebase import MultiCodebaseAnalyzer
 from analyzer.analysis_storage import AnalysisStorage
 from analyzer.improvement_suggester import ImprovementSuggester
+
+# Suppress warnings at the very beginning
+warnings.filterwarnings('ignore')
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import logging
+logging.getLogger('faiss').setLevel(logging.ERROR)
+logging.getLogger('faiss.loader').setLevel(logging.ERROR)
 
 def process_discovery_artifacts(result: Dict[str, Any], args):
     """Process and output discovery artifacts"""
@@ -172,6 +181,8 @@ def main():
         
     except Exception as e:
         print(f"Error during analysis: {str(e)}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
 if __name__ == "__main__":

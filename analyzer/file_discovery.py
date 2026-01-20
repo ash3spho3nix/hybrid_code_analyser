@@ -20,6 +20,8 @@ class DiscoveryResult:
         self.ignore_report = None
         self.type_filter_report = None
         self.discovery_artifact = None
+        # Initialize files_for_analysis to prevent AttributeError
+        self.files_for_analysis = []
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert discovery result to dictionary for JSON serialization"""
@@ -100,39 +102,48 @@ class FileDiscoveryService:
         Returns:
             DiscoveryResult object containing all discovery data
         """
-        # 1. Validate input paths
-        validation_result = self.path_validator.validate_paths(root_paths)
-        if not validation_result.is_valid:
-            raise ValueError(f"Invalid paths: {validation_result.errors}")
-        
-        # 2. Discover all files in root paths
-        all_files = self._discover_all_files(root_paths)
-        
-        # 3. Apply ignore rules
-        filtered_files, ignore_report = self._apply_ignore_rules(all_files, root_paths, analyzer_type)
-        
-        # 4. Apply file type filtering
-        code_files, type_filter_report = self.file_type_filter.filter_files(filtered_files)
-        
-        # 5. Generate discovery artifacts
-        artifact = self.artifact_generator.generate_artifact(
-            all_files,
-            ignore_report,
-            type_filter_report,
-            code_files
-        )
-        
-        # Create DiscoveryResult object from the artifact
+        # Initialize discovery result early to ensure it always exists
         discovery_result = DiscoveryResult()
-        discovery_result.files_discovered = artifact['discovery_summary']['files_discovered']
-        discovery_result.files_ignored_by_rule = artifact['discovery_summary']['files_ignored_by_rule']
-        discovery_result.files_ignored_by_type = artifact['discovery_summary']['files_ignored_by_type']
-        discovery_result.files_passed_to_analysis = artifact['discovery_summary']['files_passed_to_analysis']
-        discovery_result.ignore_report = ignore_report
-        discovery_result.type_filter_report = type_filter_report
-        discovery_result.discovery_artifact = artifact
-        # Store the actual file list for use by analyzers
-        discovery_result.files_for_analysis = code_files
+        
+        try:
+            # 1. Validate input paths
+            validation_result = self.path_validator.validate_paths(root_paths)
+            if not validation_result.is_valid:
+                raise ValueError(f"Invalid paths: {validation_result.errors}")
+            
+            # 2. Discover all files in root paths
+            all_files = self._discover_all_files(root_paths)
+            
+            # 3. Apply ignore rules
+            filtered_files, ignore_report = self._apply_ignore_rules(all_files, root_paths, analyzer_type)
+            
+            # 4. Apply file type filtering
+            code_files, type_filter_report = self.file_type_filter.filter_files(filtered_files)
+            
+            # 5. Generate discovery artifacts
+            artifact = self.artifact_generator.generate_artifact(
+                all_files,
+                ignore_report,
+                type_filter_report,
+                code_files
+            )
+            
+            # Create DiscoveryResult object from the artifact
+            discovery_result.files_discovered = artifact['discovery_summary']['files_discovered']
+            discovery_result.files_ignored_by_rule = artifact['discovery_summary']['files_ignored_by_rule']
+            discovery_result.files_ignored_by_type = artifact['discovery_summary']['files_ignored_by_type']
+            discovery_result.files_passed_to_analysis = artifact['discovery_summary']['files_passed_to_analysis']
+            discovery_result.ignore_report = ignore_report
+            discovery_result.type_filter_report = type_filter_report
+            discovery_result.discovery_artifact = artifact
+            # Store the actual file list for use by analyzers
+            discovery_result.files_for_analysis = code_files
+            
+        except Exception as e:
+            # Ensure files_for_analysis is always set even on error
+            discovery_result.files_for_analysis = []
+            # Re-raise the exception to let caller handle it
+            raise
         
         return discovery_result
 
