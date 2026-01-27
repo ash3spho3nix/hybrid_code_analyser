@@ -1,0 +1,41 @@
+{
+  "static": {
+    "discovery_metadata": {
+      "timestamp": "2026-01-19T09:22:47.082478Z",
+      "artifact_version": "1.0",
+      "generator": "DiscoveryArtifactGenerator"
+    },
+    "discovery_summary": {
+      "files_discovered": 144,
+      "files_ignored_by_rule": 2,
+      "files_ignored_by_type": 80,
+      "files_passed_to_analysis": 62,
+      "analysis_coverage_percentage": 43.06
+    },
+    "ignore_processing": {
+      "rules_applied": true,
+      "files_ignored": 2,
+      "sources": [
+        "default_config"
+      ],
+      "patterns_used": [
+        "*.md"
+      ],
+      "ignored_files_count": 2,
+      "rules_source": "default_config",
+      "fallback_used": true,
+      "ignored_files_sample": [
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\chatroom\\src\\core\\examples\\README.md",
+          "reason": "Ignored by default_config [pattern: *.md]"
+        },
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\chatroom\\src\\core\\roleplay\\README.md",
+          "reason": "Ignored by default_config [pattern: *.md]"
+        }
+      ]
+    },
+    "file_type_filtering": {
+      "filtering_applied": true,
+      "files_filtered": 80,
+      "supported_extensions": 

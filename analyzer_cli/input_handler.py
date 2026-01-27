@@ -74,7 +74,9 @@ def discover_files_from_paths(paths: List[str]) -> Tuple[List[str], List[Dict[st
             if os.path.isfile(path):
                 # Single file
                 if is_valid_file_extension(path, supported_extensions):
-                    all_files.append(path)
+                    # Normalize path to absolute format
+                    normalized_path = os.path.abspath(path)
+                    all_files.append(normalized_path)
                 else:
                     error = AnalysisError(
                         error_type="unsupported_file_type",
@@ -89,7 +91,9 @@ def discover_files_from_paths(paths: List[str]) -> Tuple[List[str], List[Dict[st
                     for file in files:
                         file_path = os.path.join(root, file)
                         if is_valid_file_extension(file_path, supported_extensions):
-                            all_files.append(file_path)
+                            # Normalize path to absolute format
+                            normalized_path = os.path.abspath(file_path)
+                            all_files.append(normalized_path)
         except Exception as e:
             error = AnalysisError(
                 error_type="file_discovery_error",

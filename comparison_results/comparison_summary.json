@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-01-19T09:36:56.364534",
+  "project_count": 3,
+  "projects_analyzed": [
+    {
+      "name": "Codebase_Indexer",
+      "path": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\Codebase_Indexer",
+      "status": "error"
+    },
+    {
+      "name": "core",
+      "path": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\chatroom\\src\\core",
+      "status": "error"
+    },
+    {
+      "name": ".",
+      "path": ".",
+      "status": "error"
+    }
+  ],
+  "overall_statistics": {
+    "successful_analyses": 0,
+    "failed_analyses": 3,
+    "success_rate": 0.0
+  },
+  "key_findings": []
+}

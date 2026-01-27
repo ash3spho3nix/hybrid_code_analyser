@@ -22,21 +22,13 @@ class DynamicAnalyzerProfiling(DynamicAnalyzerBase):
                 script_path
             )
                
+            # Validate Scalene execution with enhanced failure detection
+            execution_success = self._validate_scalene_execution(result, context)
+            
             # Parse Scalene output
             scalene_data = self._parse_scalene_output(result)
-               
-            # Check for execution errors
-            if result.get('stderr'):
-                failure = ExecutionFailure(
-                    failure_type=FailureType.TOOL_ERROR,
-                    severity=FailureSeverity.WARNING,
-                    message="Scalene produced stderr output",
-                    context=context,
-                    raw_error=result['stderr'],
-                    is_analysis_finding=False
-                )
-                self._record_failure(failure)
-               
+            scalene_data['execution_success'] = execution_success
+                
             return scalene_data
                
         except ImportError:
@@ -72,6 +64,68 @@ class DynamicAnalyzerProfiling(DynamicAnalyzerBase):
         # Get profiling results
         return scalene_profiler.get_profiling_results()
    
+    def _validate_scalene_execution(self, result: Dict[str, Any], context: str) -> bool:
+        """Validate Scalene execution success with detailed failure mode detection"""
+        execution_success = True
+        
+        # Check for execution errors
+        if result.get('stderr'):
+            error_msg = result['stderr']
+            
+            # Determine failure mode based on error content
+            error_lower = str(error_msg).lower()
+            
+            if "not found" in error_lower or "command not found" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TOOL_ERROR,
+                    severity=FailureSeverity.CRITICAL,
+                    message=f"Scalene tool not found: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            elif "timeout" in error_lower or "timed out" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TIMEOUT_ERROR,
+                    severity=FailureSeverity.WARNING,
+                    message=f"Scalene execution timed out: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            elif "permission denied" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.FILE_ACCESS_ERROR,
+                    severity=FailureSeverity.ERROR,
+                    message=f"Scalene permission error: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            elif "memory error" in error_lower or "out of memory" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.RUNTIME_ERROR,
+                    severity=FailureSeverity.ERROR,
+                    message=f"Scalene memory error: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            else:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TOOL_ERROR,
+                    severity=FailureSeverity.ERROR,
+                    message=f"Scalene execution error: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            
+            self._record_failure(failure)
+            execution_success = False
+        
+        return execution_success
+    
     def _parse_scalene_output(self, scalene_data: Dict[str, Any]) -> Dict[str, Any]:
         """Parse Scalene profiling output into standardized format"""
         return {
@@ -105,21 +159,13 @@ class DynamicAnalyzerProfiling(DynamicAnalyzerBase):
                 script_path
             )
               
+            # Validate VizTracer execution with enhanced failure detection
+            execution_success = self._validate_viztracer_execution(result, context)
+            
             # Parse VizTracer output
             trace_data = self._parse_viztracer_output(result)
-              
-            # Check for execution errors
-            if result.get('stderr'):
-                failure = ExecutionFailure(
-                    failure_type=FailureType.TOOL_ERROR,
-                    severity=FailureSeverity.WARNING,
-                    message="VizTracer produced stderr output",
-                    context=context,
-                    raw_error=result['stderr'],
-                    is_analysis_finding=False
-                )
-                self._record_failure(failure)
-              
+            trace_data['execution_success'] = execution_success
+                
             return trace_data
               
         except ImportError:
@@ -175,9 +221,71 @@ class DynamicAnalyzerProfiling(DynamicAnalyzerBase):
                 with open(f.name, 'r') as json_file:
                     return json.load(json_file)
   
+    def _validate_viztracer_execution(self, result: Dict[str, Any], context: str) -> bool:
+        """Validate VizTracer execution success with detailed failure mode detection"""
+        execution_success = True
+        
+        # Check for execution errors
+        if result.get('stderr'):
+            error_msg = result['stderr']
+            
+            # Determine failure mode based on error content
+            error_lower = str(error_msg).lower()
+            
+            if "not found" in error_lower or "command not found" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TOOL_ERROR,
+                    severity=FailureSeverity.CRITICAL,
+                    message=f"VizTracer tool not found: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            elif "timeout" in error_lower or "timed out" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TIMEOUT_ERROR,
+                    severity=FailureSeverity.WARNING,
+                    message=f"VizTracer execution timed out: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            elif "permission denied" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.FILE_ACCESS_ERROR,
+                    severity=FailureSeverity.ERROR,
+                    message=f"VizTracer permission error: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            elif "memory error" in error_lower or "out of memory" in error_lower:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.RUNTIME_ERROR,
+                    severity=FailureSeverity.ERROR,
+                    message=f"VizTracer memory error: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            else:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TOOL_ERROR,
+                    severity=FailureSeverity.ERROR,
+                    message=f"VizTracer execution error: {error_msg}",
+                    context=context,
+                    raw_error=error_msg,
+                    is_analysis_finding=False
+                )
+            
+            self._record_failure(failure)
+            execution_success = False
+        
+        return execution_success
+    
     def _parse_viztracer_output(self, trace_data: Dict[str, Any]) -> Dict[str, Any]:
         """Parse VizTracer output into standardized format"""
-         
+          
         # Extract function calls
         function_calls = []
         for event in trace_data.get("traceEvents", []):
@@ -191,7 +299,7 @@ class DynamicAnalyzerProfiling(DynamicAnalyzerBase):
                     "file": event.get("args", {}).get("file", ""),
                     "line": event.get("args", {}).get("line", 0)
                 })
-          
+           
         # Extract exceptions
         exceptions = []
         for event in trace_data.get("traceEvents", []):
@@ -203,7 +311,7 @@ class DynamicAnalyzerProfiling(DynamicAnalyzerBase):
                     "line": event.get("args", {}).get("line", 0),
                     "context": event.get("args", {}).get("context", "")
                 })
-          
+           
         return {
             "function_calls": function_calls,
             "call_count": len(function_calls),

@@ -1,0 +1,460 @@
+{
+  "test_name": "Controlled Failure Zoo",
+  "timestamp": "2026-01-19T16:21:18.057312Z",
+  "test_cases": [
+    {
+      "category": "circular_import",
+      "status": "PASS",
+      "timestamp": "2026-01-19T16:21:18.078362Z",
+      "expected_failures": 1,
+      "analysis_status": "partial",
+      "coverage_percentage": 0.0,
+      "validation_results": {
+        "timestamp": "2026-01-19T16:21:18.083410Z",
+        "validations": {
+          "analysis_status": {
+            "status": "PASS",
+            "details": {
+              "actual_status": "partial",
+              "expected_status": "partial"
+            },
+            "message": "Analysis status is correct: partial"
+          },
+          "execution_failures": {
+            "status": "PASS",
+            "details": {
+              "actual_failure_count": 1,
+              "expected_failure_count": 1,
+              "failure_type_validation": {
+                "status": "PASS",
+                "details": {
+                  "actual_types": [
+                    "CIRCULAR_IMPORT"
+                  ],
+                  "expected_types": [
+                    "CIRCULAR_IMPORT"
+                  ]
+                },
+                "message": "All failure types match expected types"
+              }
+            },
+            "message": "Execution failure count is correct: 1"
+          },
+          "coverage_percentage": {
+            "status": "PASS",
+            "details": {
+              "actual_coverage": 0.0,
+              "expected_coverage": 0.0
+            },
+            "message": "Coverage percentage is correct: 0.0%"
+          },
+          "completeness_context": {
+            "status": "PASS",
+            "details": {
+              "actual_context": "Circular import prevented analysis",
+              "expected_context": "Circular import prevented analysis"
+            },
+            "message": "Completeness context provides meaningful explanation"
+          },
+          "no_false_success": {
+            "status": "PASS",
+            "details": {
+              "analysis_status": "partial",
+              "failure_count": 1
+            },
+            "message": "No false success: analysis_status correctly reflects incomplete analysis"
+          }
+        },
+        "overall_status": "PASS"
+      }
+    },
+    {
+      "category": "discovered_not_executed",
+      "status": "FAIL",
+      "timestamp": "2026-01-19T16:21:18.091407Z",
+      "expected_failures": 0,
+      "analysis_status": "complete",
+      "coverage_percentage": 100.0,
+      "validation_results": {
+        "timestamp": "2026-01-19T16:21:18.097407Z",
+        "validations": {
+          "analysis_status": {
+            "status": "PASS",
+            "details": {
+              "actual_status": "complete",
+              "expected_status": "complete"
+            },
+            "message": "Analysis status is correct: complete"
+          },
+          "execution_failures": {
+            "status": "PASS",
+            "details": {
+              "actual_failure_count": 0,
+              "expected_failure_count": 0
+            },
+            "message": "Execution failure count is correct: 0"
+          },
+          "coverage_percentage": {
+            "status": "PASS",
+            "details": {
+              "actual_coverage": 100.0,
+              "expected_coverage": 100.0
+            },
+            "message": "Coverage percentage is correct: 100.0%"
+          },
+          "completeness_context": {
+            "status": "FAIL",
+            "details": {
+              "actual_context": "File discovered and analyzed but no execution required",
+              "expected_context": "File discovered and analyzed but no execution required"
+            },
+            "message": "Completeness context is present but lacks meaningful information"
+          },
+          "no_false_success": {
+            "status": "PASS",
+            "details": {
+              "analysis_status": "complete",
+              "failure_count": 0
+            },
+            "message": "No false success: analysis_status is 'complete' with no failures"
+          }
+        },
+        "overall_status": "FAIL"
+      }
+    },
+    {
+      "category": "ignored_by_rules",
+      "status": "FAIL",
+      "timestamp": "2026-01-19T16:21:18.101406Z",
+      "expected_failures": 0,
+      "analysis_status": "complete",
+      "coverage_percentage": 0.0,
+      "validation_results": {
+        "timestamp": "2026-01-19T16:21:18.106408Z",
+        "validations": {
+          "analysis_status": {
+            "status": "PASS",
+            "details": {
+              "actual_status": "complete",
+              "expected_status": "complete"
+            },
+            "message": "Analysis status is correct: complete"
+          },
+          "execution_failures": {
+            "status": "PASS",
+            "details": {
+              "actual_failure_count": 0,
+              "expected_failure_count": 0
+            },
+            "message": "Execution failure count is correct: 0"
+          },
+          "coverage_percentage": {
+            "status": "PASS",
+            "details": {
+              "actual_coverage": 0.0,
+              "expected_coverage": 0.0
+            },
+            "message": "Coverage percentage is correct: 0.0%"
+          },
+          "completeness_context": {
+            "status": "FAIL",
+            "details": {
+              "actual_context": "File ignored by analyzer rules",
+              "expected_context": "File ignored by analyzer rules"
+            },
+            "message": "Completeness context is present but lacks meaningful information"
+          },
+          "no_false_success": {
+            "status": "PASS",
+            "details": {
+              "analysis_status": "complete",
+              "failure_count": 0
+            },
+            "message": "No false success: analysis_status is 'complete' with no failures"
+          }
+        },
+        "overall_status": "FAIL"
+      }
+    },
+    {
+      "category": "missing_dependency",
+      "status": "PASS",
+      "timestamp": "2026-01-19T16:21:18.110411Z",
+      "expected_failures": 1,
+      "analysis_status": "partial",
+      "coverage_percentage": 0.0,
+      "validation_results": {
+        "timestamp": "2026-01-19T16:21:18.114934Z",
+        "validations": {
+          "analysis_status": {
+            "status": "PASS",
+            "details": {
+              "actual_status": "partial",
+              "expected_status": "partial"
+            },
+            "message": "Analysis status is correct: partial"
+          },
+          "execution_failures": {
+            "status": "PASS",
+            "details": {
+              "actual_failure_count": 1,
+              "expected_failure_count": 1,
+              "failure_type_validation": {
+                "status": "PASS",
+                "details": {
+                  "actual_types": [
+                    "DEPENDENCY_ERROR"
+                  ],
+                  "expected_types": [
+                    "DEPENDENCY_ERROR"
+                  ]
+                },
+                "message": "All failure types match expected types"
+              }
+            },
+            "message": "Execution failure count is correct: 1"
+          },
+          "coverage_percentage": {
+            "status": "PASS",
+            "details": {
+              "actual_coverage": 0.0,
+              "expected_coverage": 0.0
+            },
+            "message": "Coverage percentage is correct: 0.0%"
+          },
+          "completeness_context": {
+            "status": "PASS",
+            "details": {
+              "actual_context": "Missing dependency prevented analysis",
+              "expected_context": "Missing dependency prevented analysis"
+            },
+            "message": "Completeness context provides meaningful explanation"
+          },
+          "no_false_success": {
+            "status": "PASS",
+            "details": {
+              "analysis_status": "partial",
+              "failure_count": 1
+            },
+            "message": "No false success: analysis_status correctly reflects incomplete analysis"
+          }
+        },
+        "overall_status": "PASS"
+      }
+    },
+    {
+      "category": "missing_import",
+      "status": "PASS",
+      "timestamp": "2026-01-19T16:21:18.117934Z",
+      "expected_failures": 1,
+      "analysis_status": "partial",
+      "coverage_percentage": 0.0,
+      "validation_results": {
+        "timestamp": "2026-01-19T16:21:18.125937Z",
+        "validations": {
+          "analysis_status": {
+            "status": "PASS",
+            "details": {
+              "actual_status": "partial",
+              "expected_status": "partial"
+            },
+            "message": "Analysis status is correct: partial"
+          },
+          "execution_failures": {
+            "status": "PASS",
+            "details": {
+              "actual_failure_count": 1,
+              "expected_failure_count": 1,
+              "failure_type_validation": {
+                "status": "PASS",
+                "details": {
+                  "actual_types": [
+                    "IMPORT_ERROR"
+                  ],
+                  "expected_types": [
+                    "IMPORT_ERROR"
+                  ]
+                },
+                "message": "All failure types match expected types"
+              }
+            },
+            "message": "Execution failure count is correct: 1"
+          },
+          "coverage_percentage": {
+            "status": "PASS",
+            "details": {
+              "actual_coverage": 0.0,
+              "expected_coverage": 0.0
+            },
+            "message": "Coverage percentage is correct: 0.0%"
+          },
+          "completeness_context": {
+            "status": "PASS",
+            "details": {
+              "actual_context": "Import error prevented analysis",
+              "expected_context": "Import error prevented analysis"
+            },
+            "message": "Completeness context provides meaningful explanation"
+          },
+          "no_false_success": {
+            "status": "PASS",
+            "details": {
+              "analysis_status": "partial",
+              "failure_count": 1
+            },
+            "message": "No false success: analysis_status correctly reflects incomplete analysis"
+          }
+        },
+        "overall_status": "PASS"
+      }
+    },
+    {
+      "category": "runtime_exception",
+      "status": "PASS",
+      "timestamp": "2026-01-19T16:21:18.128935Z",
+      "expected_failures": 1,
+      "analysis_status": "partial",
+      "coverage_percentage": 50.0,
+      "validation_results": {
+        "timestamp": "2026-01-19T16:21:18.133935Z",
+        "validations": {
+          "analysis_status": {
+            "status": "PASS",
+            "details": {
+              "actual_status": "partial",
+              "expected_status": "partial"
+            },
+            "message": "Analysis status is correct: partial"
+          },
+          "execution_failures": {
+            "status": "PASS",
+            "details": {
+              "actual_failure_count": 1,
+              "expected_failure_count": 1,
+              "failure_type_validation": {
+                "status": "PASS",
+                "details": {
+                  "actual_types": [
+                    "RUNTIME_ERROR"
+                  ],
+                  "expected_types": [
+                    "RUNTIME_ERROR"
+                  ]
+                },
+                "message": "All failure types match expected types"
+              }
+            },
+            "message": "Execution failure count is correct: 1"
+          },
+          "coverage_percentage": {
+            "status": "PASS",
+            "details": {
+              "actual_coverage": 50.0,
+              "expected_coverage": 50.0
+            },
+            "message": "Coverage percentage is correct: 50.0%"
+          },
+          "completeness_context": {
+            "status": "PASS",
+            "details": {
+              "actual_context": "Runtime exception during analysis",
+              "expected_context": "Runtime exception during analysis"
+            },
+            "message": "Completeness context provides meaningful explanation"
+          },
+          "no_false_success": {
+            "status": "PASS",
+            "details": {
+              "analysis_status": "partial",
+              "failure_count": 1
+            },
+            "message": "No false success: analysis_status correctly reflects incomplete analysis"
+          }
+        },
+        "overall_status": "PASS"
+      }
+    },
+    {
+      "category": "syntax_error",
+      "status": "PASS",
+      "timestamp": "2026-01-19T16:21:18.138934Z",
+      "expected_failures": 1,
+      "analysis_status": "partial",
+      "coverage_percentage": 0.0,
+      "validation_results": {
+        "timestamp": "2026-01-19T16:21:18.142934Z",
+        "validations": {
+          "analysis_status": {
+            "status": "PASS",
+            "details": {
+              "actual_status": "partial",
+              "expected_status": "partial"
+            },
+            "message": "Analysis status is correct: partial"
+          },
+          "execution_failures": {
+            "status": "PASS",
+            "details": {
+              "actual_failure_count": 1,
+              "expected_failure_count": 1,
+              "failure_type_validation": {
+                "status": "PASS",
+                "details": {
+                  "actual_types": [
+                    "SYNTAX_ERROR"
+                  ],
+                  "expected_types": [
+                    "SYNTAX_ERROR"
+                  ]
+                },
+                "message": "All failure types match expected types"
+              }
+            },
+            "message": "Execution failure count is correct: 1"
+          },
+          "coverage_percentage": {
+            "status": "PASS",
+            "details": {
+              "actual_coverage": 0.0,
+              "expected_coverage": 0.0
+            },
+            "message": "Coverage percentage is correct: 0.0%"
+          },
+          "completeness_context": {
+            "status": "PASS",
+            "details": {
+              "actual_context": "Syntax error prevented analysis",
+              "expected_context": "Syntax error prevented analysis"
+            },
+            "message": "Completeness context provides meaningful explanation"
+          },
+          "no_false_success": {
+            "status": "PASS",
+            "details": {
+              "analysis_status": "partial",
+              "failure_count": 1
+            },
+            "message": "No false success: analysis_status correctly reflects incomplete analysis"
+          }
+        },
+        "overall_status": "PASS"
+      }
+    }
+  ],
+  "summary": {
+    "total_tests": 7,
+    "passed_tests": 5,
+    "failed_tests": 2,
+    "test_case_statuses": {
+      "circular_import": "PASS",
+      "discovered_not_executed": "FAIL",
+      "ignored_by_rules": "FAIL",
+      "missing_dependency": "PASS",
+      "missing_import": "PASS",
+      "runtime_exception": "PASS",
+      "syntax_error": "PASS"
+    },
+    "overall_status": "PARTIAL"
+  },
+  "status": "completed"
+}

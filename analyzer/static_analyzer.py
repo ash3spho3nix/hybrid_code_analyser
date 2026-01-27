@@ -28,6 +28,17 @@ class FailureSeverity(Enum):
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
 
+# Standard severity mapping for consistency across analyzers
+SEVERITY_MAPPING = {
+    "info": "low",
+    "warning": "medium",
+    "error": "high",
+    "critical": "critical"
+}
+
+# Reverse mapping for output formatting
+STANDARD_SEVERITY_SCALE = ["critical", "high", "medium", "low"]
+
 class ExecutionFailure:
     """Structured representation of execution failures"""
     def __init__(self, 
@@ -136,16 +147,88 @@ class StaticAnalyzer:
             return f"{method_name} analysis of {codebase_path}"
         except:
             return f"{method_name} analysis"
- 
+  
+    def _validate_semgrep_execution(self, semgrep_results: Dict[str, Any], context: str):
+        """Validate Semgrep execution success with detailed failure mode detection"""
+        # Check for errors in Semgrep results
+        if "error" in semgrep_results:
+            error_msg = semgrep_results.get("error", "Unknown Semgrep error")
+            
+            # Determine failure mode based on error content
+            failure_type = FailureType.TOOL_ERROR
+            severity = FailureSeverity.ERROR
+            is_analysis_finding = False
+            
+            # Analyze error content to determine specific failure mode
+            error_lower = str(error_msg).lower()
+            if "not found" in error_lower or "command not found" in error_lower:
+                failure_type = FailureType.TOOL_ERROR
+                severity = FailureSeverity.CRITICAL
+                message = f"Semgrep tool not found: {error_msg}"
+            elif "timeout" in error_lower or "timed out" in error_lower:
+                failure_type = FailureType.TOOL_ERROR
+                severity = FailureSeverity.WARNING
+                message = f"Semgrep execution timed out: {error_msg}"
+            elif "permission denied" in error_lower:
+                failure_type = FailureType.FILE_ACCESS_ERROR
+                severity = FailureSeverity.ERROR
+                message = f"Semgrep permission error: {error_msg}"
+            elif "no such file or directory" in error_lower:
+                failure_type = FailureType.FILE_ACCESS_ERROR
+                severity = FailureSeverity.ERROR
+                message = f"Semgrep file access error: {error_msg}"
+            elif "invalid argument" in error_lower or "invalid option" in error_lower:
+                failure_type = FailureType.TOOL_ERROR
+                severity = FailureSeverity.ERROR
+                message = f"Semgrep configuration error: {error_msg}"
+            else:
+                message = f"Semgrep execution failed: {error_msg}"
+            
+            # Create structured failure record
+            failure = ExecutionFailure(
+                failure_type=failure_type,
+                severity=severity,
+                message=message,
+                context=f"{context} - Semgrep validation",
+                raw_error=error_msg,
+                traceback_str="",
+                is_analysis_finding=is_analysis_finding
+            )
+            self._record_failure(failure)
+        else:
+            # Validate that Semgrep produced expected output format
+            if not isinstance(semgrep_results, dict):
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TOOL_ERROR,
+                    severity=FailureSeverity.ERROR,
+                    message="Semgrep returned invalid output format",
+                    context=f"{context} - Semgrep output validation",
+                    raw_error=str(semgrep_results),
+                    traceback_str="",
+                    is_analysis_finding=False
+                )
+                self._record_failure(failure)
+            elif "results" not in semgrep_results:
+                failure = ExecutionFailure(
+                    failure_type=FailureType.TOOL_ERROR,
+                    severity=FailureSeverity.WARNING,
+                    message="Semgrep results missing expected 'results' field",
+                    context=f"{context} - Semgrep output validation",
+                    raw_error=str(semgrep_results),
+                    traceback_str="",
+                    is_analysis_finding=False
+                )
+                self._record_failure(failure)
+  
     def analyze_codebase(self, codebase_path: str) -> Dict[str, Any]:
         """Comprehensive analysis of a single codebase using Semgrep"""
         # Reset failure tracking for this analysis run
         self.execution_failures = []
         self.failure_count = 0
         self.issue_count = 0
-         
+          
         context = self._get_analysis_context(codebase_path, "analyze_codebase")
-         
+          
         if not os.path.exists(codebase_path):
             # Existing error handling remains the same
             failure = ExecutionFailure(
@@ -158,7 +241,7 @@ class StaticAnalyzer:
                 is_analysis_finding=False
             )
             self._record_failure(failure)
-             
+              
             return {
                 "error": f"Codebase path does not exist: {codebase_path}",
                 "execution_failures": [failure.to_dict()],
@@ -167,19 +250,19 @@ class StaticAnalyzer:
                     "reason": "Codebase path does not exist"
                 }
             }
-         
+          
         # Use FileDiscoveryService instead of os.walk
         discovery_service = FileDiscoveryService()
-         
+          
         try:
             discovery_result = discovery_service.discover_files([codebase_path], analyzer_type='static')
-             
+              
             # Get pre-filtered list of files for analysis
             files_to_analyze = discovery_result.files_for_analysis
-             
+              
             # Store discovery artifact for reporting
             discovery_artifact = discovery_result.discovery_artifact
-             
+              
         except Exception as e:
             failure = ExecutionFailure(
                 failure_type=FailureType.TOOL_ERROR,
@@ -191,32 +274,21 @@ class StaticAnalyzer:
                 is_analysis_finding=False
             )
             self._record_failure(failure)
-             
+              
             # Fallback to original behavior if discovery fails
             files_to_analyze = []
             for root, dirs, files in os.walk(codebase_path):
                 for file in files:
                     file_path = os.path.join(root, file)
                     files_to_analyze.append(file_path)
-             
+              
             discovery_artifact = None
-         
+          
         # Run Semgrep analysis (primary static analysis tool)
         semgrep_results = self.semgrep.analyze(codebase_path)
-         
-        # Check for Semgrep errors
-        if "error" in semgrep_results:
-            # Existing error handling remains the same
-            failure = ExecutionFailure(
-                failure_type=FailureType.TOOL_ERROR,
-                severity=FailureSeverity.ERROR,
-                message=f"Semgrep analysis failed: {semgrep_results['error']}",
-                context=f"{context} - Semgrep analysis",
-                raw_error=semgrep_results.get("error", ""),
-                traceback_str="",
-                is_analysis_finding=False
-            )
-            self._record_failure(failure)
+          
+        # Enhanced Semgrep validation with detailed failure mode detection
+        self._validate_semgrep_execution(semgrep_results, context)
          
         # Update custom analysis to use pre-filtered files
         custom_analysis = self._custom_analysis_with_files(files_to_analyze, codebase_path)
@@ -462,19 +534,9 @@ class StaticAnalyzer:
         
         # Run Semgrep analysis (primary static analysis tool)
         semgrep_results = self.semgrep.analyze(codebase_path)
-        
-        # Check for Semgrep errors
-        if "error" in semgrep_results:
-            failure = ExecutionFailure(
-                failure_type=FailureType.TOOL_ERROR,
-                severity=FailureSeverity.ERROR,
-                message=f"Semgrep analysis failed: {semgrep_results['error']}",
-                context=f"{context} - Semgrep analysis",
-                raw_error=semgrep_results.get("error", ""),
-                traceback_str="",
-                is_analysis_finding=False
-            )
-            self._record_failure(failure)
+          
+        # Enhanced Semgrep validation with detailed failure mode detection
+        self._validate_semgrep_execution(semgrep_results, context)
         
         # Use the pre-filtered files for custom analysis
         custom_analysis = self._custom_analysis_with_files(files_to_analyze, codebase_path)

@@ -1,0 +1,26 @@
+# Exclude documentation files
+docs/
+*.txt
+LICENSE
+CHANGELOG
+
+# Exclude JSON and configuration data (often high volume/low semantic value)
+*.json
+package-lock.json
+composer.lock
+
+# Exclude Python cache and build artifacts
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+env/
+
+# Exclude common large assets/temp folders
+assets/
+public/
+dist/
+build/
+.git/

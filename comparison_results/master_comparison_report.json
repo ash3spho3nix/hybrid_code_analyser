@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-01-19T09:36:56.363454",
+  "project_count": 3,
+  "projects_analyzed": [
+    "Codebase_Indexer",
+    "core",
+    "."
+  ],
+  "comparison_metrics": {},
+  "key_differences": {},
+  "similarities": {},
+  "recommendations": {
+    "general": [
+      "Consider running more comprehensive static and dynamic analysis on all projects",
+      "Review and update ignore rules to ensure optimal file coverage",
+      "Address execution failures to improve analysis completeness",
+      "Use the detailed analysis results to identify specific areas for improvement"
+    ]
+  }
+}

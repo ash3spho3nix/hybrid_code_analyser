@@ -1,0 +1,98 @@
+{
+  "static_results": [
+    {
+      "file_id": "file_70684bf9",
+      "file_path": "test_sample.py",
+      "issues": [
+        {
+          "issue_id": "issue_589b3091",
+          "type": "code_quality",
+          "severity": "medium",
+          "message": "Function is too complex",
+          "line": 10,
+          "column": 5,
+          "context": "def calculate_factorial(n):"
+        },
+        {
+          "issue_id": "issue_d9f9fe29",
+          "type": "performance",
+          "severity": "low",
+          "message": "Consider using list comprehension",
+          "line": 25,
+          "column": 12,
+          "context": "for num in range(2, limit + 1):"
+        }
+      ],
+      "metrics": {
+        "complexity": 8.5,
+        "lines_of_code": 42,
+        "functions": 3,
+        "classes": 0,
+        "cyclomatic_complexity": 5,
+        "maintainability_index": 75.2
+      }
+    }
+  ],
+  "dynamic_results": [
+    {
+      "function_id": "func_414e18e5",
+      "file_id": "file_b2bc112b",
+      "function_name": "calculate_factorial",
+      "execution_time": 0.45,
+      "memory_usage": 128.7,
+      "call_count": 5,
+      "hotspots": [
+        {
+          "hotspot_id": "hotspot_80aea234",
+          "line": 15,
+          "time_spent": 0.32,
+          "percentage": 71.1,
+          "context": "return n * calculate_factorial(n - 1)"
+        }
+      ]
+    }
+  ],
+  "AI_suggestions": [
+    {
+      "id": "suggestion_50661605",
+      "category": "performance",
+      "severity": "medium",
+      "description": "Consider using memoization for recursive functions",
+      "related_files": [
+        "file_7273bddd"
+      ],
+      "estimated_impact": "30% performance improvement",
+      "confidence": 0.85,
+      "implementation_difficulty": "medium"
+    }
+  ],
+  "summary": {
+    "total_files_analyzed": 1,
+    "total_functions_analyzed": 1,
+    "total_ai_suggestions": 1,
+    "total_errors": 0,
+    "total_warnings": 1,
+    "total_critical_issues": 0,
+    "total_high_issues": 0,
+    "total_medium_issues": 1,
+    "total_low_issues": 1,
+    "critical_hotspots": 1,
+    "analysis_completeness": 100.0
+  },
+  "meta": {
+    "timestamp": "2026-01-20T14:30:19.199999Z",
+    "analyzer_version": "1.0.0",
+    "cli_version": "1.0.0",
+    "arguments": {
+      "paths": [
+        "test_sample.py"
+      ],
+      "task": "",
+      "timeout": 180,
+      "max_context": 1000,
+      "output_file": "analysis_results.json",
+      "changed_files": ""
+    }
+  },
+  "errors": []
+}

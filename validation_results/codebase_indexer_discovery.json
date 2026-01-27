@@ -1,0 +1,59 @@
+{
+  "static": {
+    "discovery_metadata": {
+      "timestamp": "2026-01-19T09:17:00.901669Z",
+      "artifact_version": "1.0",
+      "generator": "DiscoveryArtifactGenerator"
+    },
+    "discovery_summary": {
+      "files_discovered": 56,
+      "files_ignored_by_rule": 6,
+      "files_ignored_by_type": 31,
+      "files_passed_to_analysis": 19,
+      "analysis_coverage_percentage": 33.93
+    },
+    "ignore_processing": {
+      "rules_applied": true,
+      "files_ignored": 6,
+      "sources": [
+        ".gitignore"
+      ],
+      "patterns_used": [
+        "*.md",
+        "*.pyc",
+        "*.json"
+      ],
+      "ignored_files_count": 6,
+      "rules_source": ".gitignore",
+      "fallback_used": false,
+      "ignored_files_sample": [
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\Codebase_Indexer\\golden_repo.json",
+          "reason": "Ignored by .gitignore [pattern: *.json]"
+        },
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\Codebase_Indexer\\README.md",
+          "reason": "Ignored by .gitignore [pattern: *.md]"
+        },
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\Codebase_Indexer\\golden_repo\\USAGE.md",
+          "reason": "Ignored by .gitignore [pattern: *.md]"
+        },
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\Codebase_Indexer\\__pycache__\\indexer.cpython-312.pyc",
+          "reason": "Ignored by .gitignore [pattern: *.pyc]"
+        },
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\Codebase_Indexer\\__pycache__\\main.cpython-312.pyc",
+          "reason": "Ignored by .gitignore [pattern: *.pyc]"
+        },
+        {
+          "file": "C:\\Users\\vsharma.A123SYSTEMSEU\\Documents\\Python_Scripts\\AI\\Codebase_Indexer\\__pycache__\\query_engine.cpython-312.pyc",
+          "reason": "Ignored by .gitignore [pattern: *.pyc]"
+        }
+      ]
+    },
+    "file_type_filtering": {
+      "filtering_applied": true,
+      "files_filtered": 31,
+      "supported_extensions": 
